@@ -5,6 +5,7 @@ import {useFormik} from 'formik';
 
 const RegistrationForm = () => {
     // pass in initial values for form field
+    
 const formik = useFormik({
     initialValues:{
         name:'',
@@ -15,6 +16,27 @@ const formik = useFormik({
 
     onSubmit: values =>{
         console.log("submit", values)
+    },
+
+    validate: values=>{
+        // values.name values.email ....
+        // errors.name errors.email ....
+        // errors.name ="Required"
+        let errors = { // key must similiar to value objects
+        }
+        if(!values.name){
+            errors.name = "Required"
+        }
+        if(!values.email){
+            errors.email = "Required"
+        }
+        if(!values.phoneNumber){
+            errors.phoneNumber = "Required"
+        }
+        if(!values.password){
+            errors.password = "Required"
+        }
+        return errors
     }
 
 }) 
