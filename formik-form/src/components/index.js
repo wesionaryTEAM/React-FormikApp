@@ -11,13 +11,17 @@ const formik = useFormik({
         email:'',
         phoneNumber:'',
         password:''
+    },
+
+    onSubmit: values =>{
+        console.log("submit", values)
     }
 
 }) 
 
     return(
         <div>
-        <form>
+        <form onSubmit={formik.handleSubmit}>
         <label htmlFor='name'>Name</label>
         <input type="text" id="name" name="name" onChange={formik.handleChange} value={formik.values.name}/>
         <label htmlFor='email'>Email</label>
@@ -26,7 +30,7 @@ const formik = useFormik({
         <input type="number" id="phonenumber" name="phoneNumber" onChange={formik.handleChange} value={formik.values.phoneNumber}/>
         <label htmlFor='password'>Password</label>
         <input type="password" id="password" name="password" onChange={formik.handleChange} value={formik.values.password}/>
-        <button>Register</button>
+        <button type="submit">Register</button>
         </form>
         </div>
     )
