@@ -1,108 +1,72 @@
 import React from 'react'
-import { useFormik } from 'formik';
-import * as Yup from "yup";
-
+import { Grid, Paper, Button, Typography } from '@material-ui/core'
+import { TextField } from '@material-ui/core'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import * as Yup from 'yup'
 
 const RegistrationForm = () => {
-    // pass in initial values for form field
+    const paperStyle = { padding: '40px 20px', width: 250, margin: '20px auto' }
+    const btnStyle = { marginTop: 10 }
 
-    
-    // add yup to validate schema in form field
-    const validationScheme  = Yup.object({
-        name:Yup.string().required('Required'),
-        email:Yup.string().email("invalid email format").required('Required'),
-        phoneNumber:Yup.string().required('Required'),
-        password:Yup.string().required('Required'),
+    // set initial form state ...
+    const initialValues = {
+        name: '',
+        email: '',
+        phoneNumber: '',
+        password: ''
+    }
 
-    })
-    const formik = useFormik({
-        initialValues: {
-            name: '',
-            email: '',
-            phoneNumber: '',
-            password: ''
-        },
-
-        onSubmit: values => {
-            console.log("submit", values)
-        },
-
-        validate: values => {
-            // values.name values.email ....
-            // errors.name errors.email ....
-            // errors.name ="Required"
-            let errors = { // key must similiar to value objects
-            }
-            if (!values.name) {
-                errors.name = "Required"
-            }
-            if (!values.email) {
-                errors.email = "Required"
-            }
-            if (!values.phoneNumber) {
-                errors.phoneNumber = "Required"
-            }
-            if (!values.password) {
-                errors.password = "Required"
-            }
-            return errors
-        },
- validationScheme
+    // Defining yup validation schema to validate 
+    const validationSchema = Yup.object().shape({
+        name: Yup.string().min(6, " too short").required("Required"),
+        email: Yup.string().email("You must enter valid email").required("Required"),
+        phoneNumber: Yup.number().typeError("Enter valid Phone number").required("Required"),
+        password: Yup.string().min(8, "Minimum characters should be 8").required('Required')
     })
 
+    // handles submit: 
+    const onSubmit = (values, props) => {
+
+        alert(JSON.stringify(values), null, 2)
+        alert("Form is registerd...")
+
+        // call reset form 
+        props.resetForm()
+    }
     return (
-        <div>
-            <form onSubmit={formik.handleSubmit}>
-                <label htmlFor='name'>Name</label>
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    onChange={formik.handleChange}
-                    value={formik.values.name}
-                    onBlur={formik.handleBlur}
-                />
-                {formik.touched.name && formik.errors.name ? <div>{formik.errors.name}</div> : null}
+        <Grid>
+            <Paper elevation={5} style={paperStyle}>
+                <Grid align='center'>
+                    <Typography variant='h6'>Register Here</Typography>
+                    <Typography variant="caption"> Please fill the form to create an account</Typography>
+                </Grid>
+                <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
+                    {(props) => (
+                        <Form>
+                            <Field as={TextField} name='name' label='Name' fullWidth
+                                error={props.errors.name && props.touched.name}
+                                helperText={<ErrorMessage name='name' />} required />
 
-                <label htmlFor='email'>Email</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    onChange={formik.handleChange}
-                    value={formik.values.email}
-                    onBlur={formik.handleBlur}
-                />
-                {formik.touched.email &&formik.errors.email ? <div>{formik.errors.email}</div> : null}
+                            <Field as={TextField} name='email' label='Email' fullWidth
+                                error={props.errors.email && props.touched.email}
+                                helperText={<ErrorMessage name='email' />} required />
 
-                <label htmlFor='phoneNumber'>PhoneNumber</label>
-                <input
-                    type="number"
-                    id="phonenumber"
-                    name="phoneNumber"
-                    onChange={formik.handleChange}
-                    value={formik.values.phoneNumber}
-                    onBlur={formik.handleBlur}
-                />
-                {formik.touched.phoneNumber && formik.errors.phoneNumber ? <div>{formik.errors.phoneNumber}</div> : null}
+                            <Field as={TextField} name="phoneNumber" label='Phone Number' fullWidth
+                                error={props.errors.phoneNumber && props.touched.phoneNumber}
+                                helperText={<ErrorMessage name='phoneNumber' />} required />
 
-                <label htmlFor='password'>Password</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    onChange={formik.handleChange}
-                    value={formik.values.password}
-                    onBlur={formik.handleBlur}
-                />
-                {formik.touched.password &&formik.errors.password ? <div>{formik.errors.password}</div> : null}
+                            <Field as={TextField} name='password' label='Password' type='password' fullWidth
+                                error={props.errors.password && props.touched.password}
+                                helperText={<ErrorMessage name='password' />} required />
 
-                <button type="submit">Register</button>
-            </form>
-        </div>
+                            <Button type='submit' style={btnStyle} variant='contained'
+                                color='secondary'>Submit</Button>
+                        </Form>
+                    )}
+                </Formik>
+            </Paper>
+        </Grid>
     )
-
-
 }
 
 export default RegistrationForm;
