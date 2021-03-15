@@ -1,11 +1,20 @@
 import React from 'react'
 import { useFormik } from 'formik';
-
+import * as Yup from "yup";
 
 
 const RegistrationForm = () => {
     // pass in initial values for form field
 
+    
+    // add yup to validate schema in form field
+    const validationScheme  = Yup.object({
+        name:Yup.string().required('Required'),
+        email:Yup.string().email("invalid email format").required('Required'),
+        phoneNumber:Yup.string().required('Required'),
+        password:Yup.string().required('Required'),
+
+    })
     const formik = useFormik({
         initialValues: {
             name: '',
@@ -37,8 +46,8 @@ const RegistrationForm = () => {
                 errors.password = "Required"
             }
             return errors
-        }
-
+        },
+ validationScheme
     })
 
     return (
